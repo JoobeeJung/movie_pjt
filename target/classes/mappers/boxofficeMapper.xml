@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="movie.boxoffice">
+ 	<select id="movieList" resultType="boxoffice" flushCache="true" useCache="true">
+ 		SELECT movie_idx, movie_name, movie_rank, movie_thumbnail, movie_status, movie_IMDBId
+ 		FROM MOVIE
+ 	</select>
+ 	
+ 	<select id="theaterList" resultType="theater" flushCache="true" useCache="true">
+ 		SELECT theater_idx, theater_name, theater_address, theater_latitude, theater_longtitude, theater_tel
+ 		FROM THEATER
+ 	</select>
+ 	
+ 	<select id="myPageList" parameterType="user" resultType="booking" flushCache="true" useCache="true" >
+ 		
+ 		SELECT booking_idx, movie_idx, movie_name, booking_ticketnum, seat_num, theater_name, booking_date, booking_time, booking_status, booking_regdate, user_id,movie_thumbnail, movie_IMDbId
+ 		FROM BOOKING
+ 		WHERE user_id = #{user_id} 
+ 		order by booking_idx desc
+ 	</select>
+ 	
+ 	<insert id="bookingTicket" parameterType="booking" useGeneratedKeys="true" keyProperty="booking_idx" keyColumn="booking_idx" flushCache="true">
+
+ 		INSERT INTO BOOKING 
+	 		(booking_idx, 
+	 		movie_idx,
+	 		movie_name, 
+	 		booking_ticketnum, 
+	 		seat_num,
+	 		theater_name, 
+	 		booking_date, 
+	 		booking_time, 
+	 		booking_status, 
+	 		booking_regdate, 
+	 		user_id,
+	 		movie_thumbnail,
+	 		movie_IMDbId) 
+ 		VALUES 
+ 			(BOOKING_IDX.NEXTVAL, 
+	 		(SELECT movie_idx FROM MOVIE WHERE movie_name = #{movie_name}),
+	 		#{movie_name}, 
+	 		2,
+	 		#{seat_num},
+	 		#{theater_name},
+	 		#{booking_date},
+	 		#{booking_time},
+	 		1,
+	 		SYSDATE, 
+	 		#{user_id},
+	 		(SELECT movie_thumbnail FROM MOVIE WHERE movie_name = #{movie_name}),
+	 		(SELECT movie_IMDbId FROM MOVIE WHERE movie_name = #{movie_name}))	
+ 		 		
+ 	</insert>
+ 	
+ 	<delete id="cancelTicket">
+ 		DELETE FROM BOOKING WHERE booking_idx = #{booking_idx}
+ 	</delete>
+ 	
+ 	<update id="updateTicket">
+ 		UPDATE BOOKING SET 
+ 			theater_name = #{theater_name},
+ 			booking_date = #{booking_date}, 
+	 		booking_time = #{booking_time}, 
+ 			booking_regdate = SYSDATE
+ 		WHERE booking_idx = #{booking_idx}
+ 	</update>
+</mapper>  
+
+
+<!--	movie_idx = (SELECT movie_idx FROM MOVIE WHERE movie_name = #{movie_name}),
+ 			movie_name = #{movie_name}, 
+	 		booking_ticketnum = 2,
+	 		seat_num = #{seat_num}, 
+ 			movie_thumbnail = (SELECT movie_thumbnail FROM MOVIE WHERE movie_name = #{movie_name}),
+ 			movie_IMDbId = (SELECT movie_IMDbId FROM MOVIE WHERE movie_name = #{movie_name}) -->
