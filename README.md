@@ -1,6 +1,8 @@
 # movie_pjt
 developed web/mobile application for booking movies with IMDb API
 
+Web application demo : https://youtu.be/wzRHeXIxSUI
+
 <img width="1206" alt="image" src="https://user-images.githubusercontent.com/49167217/201529316-629348d6-07a7-4456-970c-b27178a3d250.png">
 <img width="1192" alt="image" src="https://user-images.githubusercontent.com/49167217/201529355-da290de8-0cb4-4749-8090-7437c8876d60.png">
 <img width="1209" alt="image" src="https://user-images.githubusercontent.com/49167217/201529394-7c1da233-1b8a-45fc-9c22-17ca73c038af.png">
